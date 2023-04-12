@@ -1,5 +1,11 @@
 local plugins = {
     {
+        "kyazdani42/nvim-web-devicons",
+        config = function ()
+            require('core.plugins.devicons')
+        end
+    },
+    {
         "glepnir/dashboard-nvim",
         event = "VimEnter",
         config = function()
