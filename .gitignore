@@ -4,3 +4,4 @@ jgit/
 configstore/
 flutter/
 .mono/
+.isolated-storage/

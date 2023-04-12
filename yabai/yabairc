@@ -50,5 +50,7 @@ yabai -m config                                 \
 
 yabai -m rule --add app="^System Preferences$" manage=off
 yabai -m rule --add app="^Step Two$" manage=off
+yabai -m rule --add app="^System Settings$" manage=off
+yabai -m rule --add app="^Software Update*$" manage=off
 
 echo "yabai configuration loaded.."
