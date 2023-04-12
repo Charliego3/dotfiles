@@ -151,6 +151,13 @@ local plugins = {
 			require("lvim.core.dap").setup_ui()
 		end,
 	}, ]]
+    {
+        "rcarriga/nvim-dap-ui",
+        dependencies = { "mfussenegger/nvim-dap", lazy = true },
+        config = function ()
+            require('core.plugins.dapui')
+        end
+    },
 
     -- Comments
     {
