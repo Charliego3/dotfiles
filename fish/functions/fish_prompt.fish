@@ -10,7 +10,7 @@ function _prompt_git -a current_dir -d 'Display the actual git state'
   set -l git_branch (_git_branch_name)
   set -l gs (_git_status)
   if [ "$dirty" -o "$staged" ]                                      # if either dirty or staged
-    set flag_fg (set_color 62A)
+    set flag_fg (set_color F700FF)
   else if [ "$stashed" ]
     set flag_fg (set_color brred)
   end
@@ -19,27 +19,32 @@ end
 function _git_status -d 'Check git status'
   set -l git_status (command git status --porcelain 2> /dev/null | cut -c 1-2)
   set -l ahead (_git_ahead); echo -n $ahead                                    #show # of commits ahead/behind
-  if [ (echo -sn $git_status\n | egrep -c "[ACDMT][ MT]|[ACMT]D") -gt 0 ]      #added
-    echo -n (set_color green)' '
+  set addedC (echo -sn $git_status\n | egrep -c "[ACDMT][ MT]|[ACMT]D")
+  if [ $addedC -gt 0 ]      #added
+    echo -n (set_color green)'❪'$addedC'❫󰐗 ' #  󰐗  icon
   end
-  #set -l staged  (command git diff --cached --no-ext-diff --quiet --exit-code; or echo -n '~')      #was '~'
-  if [ (echo -sn $git_status\n | egrep -c "[ ACMRT]D") -gt 0 ]                  #deleted
-    echo -n (set_color red)' '
+  set deletedC (echo -sn $git_status\n | egrep -c "[ ACMRT]D")
+  if [ $deletedC -gt 0 ]                  #deleted
+    echo -n (set_color red)'❪'$deletedC'❫ ' #    icon
   end
-  if [ (echo -sn $git_status\n | egrep -c ".[MT]") -gt 0 ]                      #modified
-    echo -n (set_color 708090)' '
+  set modifiedC (echo -sn $git_status\n | egrep -c ".[MT]")
+  if [ $modifiedC -gt 0 ]                      #modified
+    echo -n (set_color 708090)'❪'$modifiedC'❫ ' #   icon
   end
-  if [ (echo -sn $git_status\n | egrep -c "R.") -gt 0 ]                         #renamed
-    echo -n (set_color purple)' '
+  set renamedC (echo -sn $git_status\n | egrep -c "R.")
+  if [ $renamedC -gt 0 ]                         #renamed
+    echo -n (set_color purple)'❪'$renamedC'❫󰛿 ' #  󰛿  icon
   end
-  if [ (echo -sn $git_status\n | egrep -c "AA|DD|U.|.U") -gt 0 ]                #unmerged
-    echo -n (set_color brred)''
+  set unmergedC (echo -sn $git_status\n | egrep -c "AA|DD|U.|.U")
+  if [ $unmergedC -gt 0 ]                #unmerged
+    echo -n (set_color brred)'❪'$unmergedC'❫󱐢 ' #  󱐢  󰰮  icon
   end
-  if [ (echo -sn $git_status\n | egrep -c "\?\?") -gt 0 ]                       #untracked (new) files
-    echo -n (set_color EE9A00)' '
+  set untrackedC (echo -sn $git_status\n | egrep -c "\?\?")
+  if [ $untrackedC -gt 0 ]                       #untracked (new) files
+    echo -n (set_color EE9A00)'❪'$untrackedC'❫ '
   end
   if test (command git rev-parse --verify --quiet refs/stash >/dev/null)        #stashed (was '$')
-    echo -n (set_color brred)' '
+    echo -n (set_color brred)'󰀨 ' #  󰀨 󰀩 󰚽  icon
   end
   echo -n -s (set_color normal)
 end
@@ -48,7 +53,8 @@ function _git_ahead -d         'Print the ahead/behind state for the current bra
     _git_ahead_verbose
     return
   end
-  command git rev-list --left-right '@{upstream}...HEAD' 2> /dev/null | awk '/>/ {a += 1} /</ {b += 1} {if (a > 0 && b > 0) nextfile} END {if (a > 0 && b > 0) print "⇕"; else if (a > 0) print ""; else if (b > 0) print ""}' #↑↓⇕⬍↕
+  # a is HEAD, b is upstream上游
+  command git rev-list --left-right '@{upstream}...HEAD' 2> /dev/null | awk '/>/ {a += 1} /</ {b += 1} {if (a > 0 && b > 0) nextfile} END {if (a > 0 && b > 0) print "󰿣 "; else if (a > 0) print "󰊳 "; else if (b > 0) print "󱑤 "}' # ↯  ↑  ↓ ⇕ ⬍ ↕
 end
 function _git_ahead_verbose -d 'Print a more verbose ahead/behind state for the current branch'
   set -l commits (command git rev-list --left-right '@{upstream}...HEAD' 2> /dev/null)
