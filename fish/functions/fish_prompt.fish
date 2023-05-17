@@ -21,27 +21,27 @@ function _git_status -d 'Check git status'
   set -l ahead (_git_ahead); echo -n $ahead                                    #show # of commits ahead/behind
   set addedC (echo -sn $git_status\n | egrep -c "[ACDMT][ MT]|[ACMT]D")
   if [ $addedC -gt 0 ]      #added
-    echo -n (set_color green)'❪'$addedC'❫󰐗 ' #  󰐗  icon
+    echo -n (set_color green)'⦍'$addedC'⦎󰐗 ' #  󰐗  icon
   end
   set deletedC (echo -sn $git_status\n | egrep -c "[ ACMRT]D")
   if [ $deletedC -gt 0 ]                  #deleted
-    echo -n (set_color red)'❪'$deletedC'❫ ' #    icon
+    echo -n (set_color red)'⦍'$deletedC'⦎ ' #    icon
   end
   set modifiedC (echo -sn $git_status\n | egrep -c ".[MT]")
   if [ $modifiedC -gt 0 ]                      #modified
-    echo -n (set_color 708090)'❪'$modifiedC'❫ ' #   icon
+    echo -n (set_color 708090)'⦍'$modifiedC'⦎ ' #   icon
   end
   set renamedC (echo -sn $git_status\n | egrep -c "R.")
   if [ $renamedC -gt 0 ]                         #renamed
-    echo -n (set_color purple)'❪'$renamedC'❫󰛿 ' #  󰛿  icon
+    echo -n (set_color purple)'⦍'$renamedC'⦎󰛿 ' #  󰛿  icon
   end
   set unmergedC (echo -sn $git_status\n | egrep -c "AA|DD|U.|.U")
   if [ $unmergedC -gt 0 ]                #unmerged
-    echo -n (set_color brred)'❪'$unmergedC'❫󱐢 ' #  󱐢  󰰮  icon
+    echo -n (set_color brred)'⦍'$unmergedC'⦎󱐢 ' #  󱐢  󰰮  icon
   end
   set untrackedC (echo -sn $git_status\n | egrep -c "\?\?")
   if [ $untrackedC -gt 0 ]                       #untracked (new) files
-    echo -n (set_color EE9A00)'❪'$untrackedC'❫ '
+    echo -n (set_color EE9A00)'⦍'$untrackedC'⦎ '
   end
   if test (command git rev-parse --verify --quiet refs/stash >/dev/null)        #stashed (was '$')
     echo -n (set_color brred)'󰀨 ' #  󰀨 󰀩 󰚽  icon
