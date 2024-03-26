@@ -1,40 +1,42 @@
-require("core.neovide")
+vim.g.base46_cache = vim.fn.stdpath("data") .. "/nvchad/base46/"
+vim.g.mapleader = " "
 
-if vim.fn.has("nvim-0.8") ~= 1 then
-    vim.notify("Please upgrade your Neovim base installation. Requires v0.8+", vim.log.levels.WARN)
-    vim.wait(1000, function()
-    end)
-    vim.cmd("cquit")
+require("neovide")
+
+-- bootstrap lazy and all plugins
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
+if not vim.loop.fs_stat(lazypath) then
+	local repo = "https://github.com/folke/lazy.nvim.git"
+	vim.fn.system({ "git", "clone", "--filter=blob:none", repo, "--branch=stable", lazypath })
 end
 
-local base_dir = vim.env.NVIM_BASE_DIR
-    or (function()
-        local init_path = debug.getinfo(1, "S").source
-        return init_path:sub(2):match("(.*[/\\])"):sub(1, -2)
-    end)()
+vim.opt.rtp:prepend(lazypath)
 
-if not vim.tbl_contains(vim.opt.rtp:get(), base_dir) then
-    vim.opt.rtp:append(base_dir)
-end
+local lazy_config = require("configs.lazy")
 
--- vim.api.nvim_exec([[
---     augroup reload_vimrc
---         autocmd!
---         autocmd BufWritePost $MYVIMRC lua package.loaded['$MYVIMRC'] = nil; required('$MYVIMRC')
---     augroup end
--- ]], false)
+-- load plugins
+require("lazy").setup({
+	{
+		"NvChad/NvChad",
+		lazy = false,
+		branch = "v2.5",
+		import = "nvchad.plugins",
+		config = function()
+			require("configs.lspconfig")
+			require("options")
+		end,
+	},
 
--- vim.notify(base_dir, vim.log.levels.WARN)
--- vim.notify(vim.fn.stdpath("data"), vim.log.levels.WARN)
+	{ import = "plugins" },
+}, lazy_config)
 
-require("core").setup()
-require("core.plugins")
+-- load theme
+dofile(vim.g.base46_cache .. "defaults")
+dofile(vim.g.base46_cache .. "statusline")
 
-vim.api.nvim_create_autocmd("BufEnter", {
-    callback = function()
-        local bufname = vim.api.nvim_buf_get_name(0)
-        if bufname == "NoName" then
-            vim.cmd("close")
-        end
-    end,
-})
+require("nvchad.autocmds")
+
+vim.schedule(function()
+	require("mappings")
+end)
