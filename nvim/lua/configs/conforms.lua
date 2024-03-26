@@ -16,6 +16,6 @@ local options = {
 local conform = require("conform")
 conform.setup(options)
 
-local google_java = vim.deepcopy(require("conform.formatters.google-java-format"))
-require("conform.util").add_formatter_args(google_java, { "-a" })
-conform.formatters.google_java = google_java
+-- local google_java = vim.deepcopy(require("conform.formatters.google-java-format"))
+-- require("conform.util").add_formatter_args(google_java, { "-a" })
+-- conform.formatters.google_java = google_java
