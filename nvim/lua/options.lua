@@ -1,13 +1,5 @@
-require("nvchad.options")
-
--- add yours here!
-local o = vim.o
-o.shiftwidth = 4
-o.tabstop = 4
-o.softtabstop = 4
-o.cursorline = true
-o.scrolloff = 5
 vim.opt.completeopt = { "menuone" }
+vim.g.codeium_disable_bindings = 1
 
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = { "*", "!*.java" },

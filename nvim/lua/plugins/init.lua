@@ -1,20 +1,4 @@
 return {
-	-- {
-	-- 	"neovim/nvim-lspconfig",
-	-- 	opts = {
-	-- 		inlay_hints = { enabled = true },
-	-- 		servers = {
-	-- 			lua_ls = {
-	-- 				settings = {
-	-- 					Lua = {
-	-- 						hint = { enable = true },
-	-- 					},
-	-- 				},
-	-- 			},
-	-- 		},
-	-- 	},
-	-- },
-
 	{
 		"rcarriga/nvim-notify",
 		lazy = false,
@@ -231,9 +215,23 @@ return {
 			})
 		end,
 	},
-	-- {
-	-- 	"Exafunction/codeium.vim",
-	-- 	event = "BufEnter",
-	-- 	disabled = true,
-	-- },
+	{
+		"Exafunction/codeium.vim",
+		event = "BufEnter",
+		config = function()
+			-- Change '<C-g>' here to any keycode you like.
+			vim.keymap.set("i", "<C-g>", function()
+				return vim.fn["codeium#Accept"]()
+			end, { expr = true, silent = true })
+			vim.keymap.set("i", "<c-;>", function()
+				return vim.fn["codeium#CycleCompletions"](1)
+			end, { expr = true, silent = true })
+			vim.keymap.set("i", "<c-,>", function()
+				return vim.fn["codeium#CycleCompletions"](-1)
+			end, { expr = true, silent = true })
+			vim.keymap.set("i", "<c-x>", function()
+				return vim.fn["codeium#Clear"]()
+			end, { expr = true, silent = true })
+		end,
+	},
 }

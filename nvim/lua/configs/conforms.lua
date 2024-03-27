@@ -7,10 +7,10 @@ local options = {
 		-- java = { "google_java" },
 	},
 
-	format_on_save = {
-		lsp_fallback = true,
-		timeout_ms = 500,
-	},
+	-- format_on_save = {
+	-- 	lsp_fallback = true,
+	-- 	timeout_ms = 500,
+	-- },
 }
 
 local conform = require("conform")

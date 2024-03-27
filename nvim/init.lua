@@ -14,6 +14,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local lazy_config = require("configs.lazy")
+require("options")
 
 -- load plugins
 require("lazy").setup({
@@ -24,7 +25,13 @@ require("lazy").setup({
 		import = "nvchad.plugins",
 		config = function()
 			require("configs.lspconfig")
-			require("options")
+			require("nvchad.options")
+			local o = vim.o
+			o.shiftwidth = 4
+			o.tabstop = 4
+			o.softtabstop = 4
+			o.cursorline = true
+			o.scrolloff = 5
 		end,
 	},
 
